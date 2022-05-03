@@ -1,20 +1,20 @@
-; PC-9821Cx �d���I�t�R�}���h
+; PC-9821Cx 電源オフコマンド  （undocmentedより抜粋）
 ;I/O	0F4Ah
-;���O	�����R������[INDEX]
-;�@�\
-;	bit 7�`0: ���W�X�^�w��
-;		* I/O 0F4Bh�œǂݏ������郌�W�X�^�ԍ����w�肷��
-;�֘A	I/O 0F4Bh
+;名前	リモコン制御[INDEX]
+;機能
+;	bit 7～0: レジスタ指定
+;		* I/O 0F4Bhで読み書きするレジスタ番号を指定する
+;関連	I/O 0F4Bh
 ;		I/O 0C24h,0C2Bh,0C2Dh
 ;I/O	0F4Bh
-;	* I/O 0F4Ah�Ŏw�肳�ꂽ���W�X�^��ǂݏ�������B
-;	13h	|�d���R���g���[��
+;	* I/O 0F4Ahで指定されたレジスタを読み書きする。
+;	13h	|電源コントロール
 ;		|[WRITE]
 ;		|	80h,06h,00h,00h,80h,07h,00h,01h,80h,01h,00h,00h
-;		|	* ���̃o�C�g����������ނƓd����ؒf����B
+;		|	* このバイト列を書き込むと電源を切断する。
 ;		|
 ;		|	80h,05h,00h,00h
-;		|	* ���̃o�C�g���d���N�����ɏ�������ł���B
+;		|	* このバイト列を電源起動時に書き込んでいる。
 
 code segment
 	assume cs:code, ds:code
@@ -55,4 +55,4 @@ start: ; 80h,06h,00h,00h,80h,07h,00h,01h,80h,01h,00h,00h
 	
 code ends
 end start
-
+
