@@ -1,0 +1,51 @@
+code	segment
+	assume	cs:code,ds:code
+	.186
+	org 100h
+   ;	
+   ;	void main()
+   ;	
+
+_main	proc	near	; void main()
+	push	bp
+	mov	bp,sp
+	push	si
+	push	di
+   ;	
+	mov	di,1	; int a=0, b=2;
+	mov	si,2
+	mov	bx,di
+	add	bx,si
+   ;	
+;	mov	bx,di	; printf("A+B=%d",a+b);
+;	add	bx,si
+;	push	bx
+;	mov	bx,offset offset:s@
+;	push	bx
+;	call	near ptr _printf
+;	pop	cx
+;	pop	cx
+
+	mov	ah, 2
+	mov	dx,bx
+	int	21h
+	
+   ;	
+	pop	di
+	pop	si
+	pop	bp
+	ret	
+	endp
+	ends
+
+;_DATA	segment word public 'DATA'
+;s@	label	byte
+;	db	'A+B=%d'
+;	db	0
+;_DATA	ends
+;_TEXT	segment byte public 'CODE'
+;_TEXT	ends
+;	extrn	_printf:near
+;	public	_main
+	end
+

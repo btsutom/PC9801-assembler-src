@@ -1,0 +1,94 @@
+%01 ■コードの始まり
+code segment
+	assume cs:code, ds:code
+	
+	org 100h ; 最初から100h分飛んでいればよい。
+	         ; ので、
+
+code segment
+	assume cs:code, ds:code
+	org	000h		; こういうのもあり。
+@str	db	100h dup(?)	; はじめのラベルまで
+				; 100h分空いている必要がある。
+
+*02 ■文字列の表示
+	mov	ah, 09h         ; ah=09h
+	mov	dx,offset mess  ; 文字列へのオフセットをdxへ
+	int	21h             ; 21h番の割り込み
+mess	db	'文字列をここへ$"; $は終端文字
+
+*03 ■文字の表示
+	mov	ah, 02h         ; ah=02h
+	mov	dx, '9'         ; 文字コードをdxへ
+	int	21h             ; 21h番の割り込み
+
+*04 ■プログラムの通常終了
+	mov	ax, 4c00h       ; ax=4c00h
+	int	21h             ; 21h番の割り込み
+
+*05 ■文字列の書き換え
+sss	db	'abcdefgh$'
+	mov	bx, 03h           	; bx=書き換える場所
+	mov	byte ptr sss[bx], '@'	; sss=書き換える文字列
+	mov	dx, offset sss		; '@' -> 書き換える文字コード
+	int	21h			; bx -> siでも可。
+
+*05 ■文字列の任意位置をレジスタ値に置き換え
+sss	db	'abcdefgh$'
+	mov	al, 03h           	; al=書き換えるコード(byte)
+	mov	byte ptr sss[bx], al	; sss=書き換える文字列
+	  	                    	; bx=書き換え位置
+	  	                    	; alを替えていけば
+	mov	dx, offset sss		;bx -> siでも可。
+	int	21h
+
+*06 ■指定ラベルへジャンプ
+	jmp	@label         ; @labelへ無条件ジャンプ
+
+*07 ■条件ジャンプ
+	cmp ax, 01h		; cmp -> ax, 01hの差でzf変化
+	jz failure		; zf=0ならfailureへジャンプ
+
+
+*08 ■csをdsに代入
+	mov ax, cs		;直接代入出来ないので
+	mov ds, ax		;axを仲介する。
+
+*09 ■macroを使う
+	kaigyo	macro		;マクロ名 macro
+		...		;　処理
+	endm         		;マクロ記述終了
+	
+*10 ■パラメータ読み込み
+	MODE	equ	[bp+4]	; パラメータのアドレス
+	...
+	cmp	byte ptr MODE,0	; byte ptr でパラメータ中身を表現
+	je	set_8
+	cmp	byte ptr MODE,1
+	je	set_16
+	cmp	byte ptr MODE,2
+	je	set_256separation
+
+*11 ■繰り返し処理
+	mov	bx, 0fh		; 0fh->繰り返し回数 cxではだめ。
+	...
+	dec	bx
+	cmp	bx, 0		; bx と 0 を比較して、
+	jz	dokoka		; bx=0なら dokoka に飛ぶ
+
+*12 ■loop（ループ）
+	mov cx, 0ah		; 繰り返す回数をcxに入れる
+	...				; この場合、0ah回（１０進で１０回）
+@label:				; ループのスタート
+	...
+	loop @label:	; @labelからこの行までをcx回繰り返す
+
+*13 ■C言語でのpokeに相当するコード
+	poke(0xa000, 10, 63)に相当するアセンブラコードは
+	mov	ax,0a000h			; pokeの第１引数
+	mov	es,ax				; ax経由でesに代入
+	mov	word ptr es:[10],63	; es:[第２引数],第３引数
+
+*14 ■シェルに返す戻り値
+	mov ax, 4c07h			;4cxxのxxが戻り値となる。
+	int 21h					;この場合、errorlevel=7になる。
