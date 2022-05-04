@@ -4,30 +4,29 @@ code segment
 	org 100h
 	
 start:
-	mov cx, 10h          ; Å‰‚Í‚P‚Uƒ‰ƒCƒ“•ª‘S•\¦Bi•K—v”|‚Pj
+	mov cx, 10h          ; æœ€åˆã¯ï¼‘ï¼–ãƒ©ã‚¤ãƒ³åˆ†å…¨è¡¨ç¤ºã€‚ï¼ˆå¿…è¦æ•°ï¼ï¼‘ï¼‰
 delline:
 	mov ax, cx
-	out 074h, ax         ; in, out ‚Í ax ‚ğg‚¤B
+	out 074h, ax         ; in, out ã¯ ax ã‚’ä½¿ã†ã€‚
 
-	push ax
+	push ax              ; ã“ã“ã„ã‚‰ãªã„ã€€ãã®ï¼‘
 	
-waitvsync1:              ; vsync ‘Ò‚¿ˆ—ŠJn
+waitvsync1:              ; vsync å¾…ã¡å‡¦ç†é–‹å§‹
 	in  ax, 0a0h
 	and ax, 020h
 	jnz waitvsync1
 waitvsync2:
 	in  ax, 0a0h
 	and ax, 020h
-	jz waitvsync2        ; vsync ‘Ò‚¿ˆ—‚±‚±‚Ü‚Å
+	jz waitvsync2        ; vsync å¾…ã¡å‡¦ç†ã“ã“ã¾ã§
 
-	pop ax
-	loop delline         ; ‚Pƒ‰ƒCƒ“‚¸‚ÂŒ¸‚ç‚µ‚Ä‚¢‚­B
+	pop ax               ; ã“ã“ã„ã‚‰ãªã„ã€€ãã®ï¼’
+	loop delline         ; ï¼‘ãƒ©ã‚¤ãƒ³ãšã¤æ¸›ã‚‰ã—ã¦ã„ãã€‚
 	
-	mov ax, 10h          ; I‚í‚Á‚½‚ç‘Sƒ‰ƒCƒ“•\¦‚É–ß‚·B
+	mov ax, 10h          ; çµ‚ã‚ã£ãŸã‚‰å…¨ãƒ©ã‚¤ãƒ³è¡¨ç¤ºã«æˆ»ã™ã€‚
 	out 074h, ax
 	mov	ax, 4c00h
 	int	21h
 	
 code ends
 end start
-
