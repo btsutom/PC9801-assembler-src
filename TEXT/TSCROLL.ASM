@@ -1,0 +1,44 @@
+; offset:dxからのテキストＶＲＡＭを表示する。
+; うまく設定すると、スクロールする。
+; 中途半端な数値だと画面が乱れたようになる。
+
+code	segment
+	assume ds:code, cs:code
+
+	org 100h
+
+start:
+	xor	dx, dx
+loop1:
+	mov	ah,0eh
+	int	18h
+
+	cmp dx, 80 * 11
+;;	cmp	dx,(2 * 80 * 25)
+	jge	fin
+	add	dx,80
+;;	add dx, 17
+	jmp	loop1
+
+;;	mov	dx, (2 * 80 * 25)
+;loop2:
+;	mov	ah,0eh
+;	int	18h
+	
+;	cmp	dx, 0
+;	jz	fin
+;	sub	dx,160
+;	sub	dx,1
+;	jmp	loop2
+
+fin:
+;	mov	ah,0eh
+;	mov	dx,00h
+;	int	18h
+	
+	mov	ax,4c00h
+	int	21h
+	
+	ends
+end	start
+	

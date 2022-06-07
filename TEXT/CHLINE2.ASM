@@ -1,5 +1,5 @@
-; 文字を１ラインずつ下から消していく。
-; vsync１回分ずつ待って消していく。
+;　１ラインずつ文字を上から表示する。
+;　vsync１回分ずつ表示する。
 
 code segment
 	assume cs:code, ds:code
@@ -7,8 +7,9 @@ code segment
 	org 100h
 	
 start:
-	mov cx, 10h          ; 最初は１６ライン分全表示。（必要数－１）
-delline:
+	mov cx, 0h          ; 最初は0ライン表示
+	mov bx, 16
+incline:
 	mov ax, cx
 	out 074h, ax         ; in, out は ax を使う。
 
@@ -21,9 +22,11 @@ waitvsync2:
 	and ax, 020h
 	jz waitvsync2        ; vsync 待ち処理ここまで
 
-	loop delline         ; １ラインずつ減らしていく。
+	inc cx               ; １ライン増やす
+	cmp cx, bx           ; １６ラインになったか？
+	jnz incline          ; １６ラインになってないならinclineに戻る
 	
-	mov ax, 10h          ; 終わったら全ライン表示に戻す。
+	mov ax, bx          ; 終わったら全ライン表示に戻す。
 	out 074h, ax
 	mov	ax, 4c00h
 	int	21h

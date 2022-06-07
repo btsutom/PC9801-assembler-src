@@ -1,6 +1,3 @@
-; •¶š‚ğ‚Pƒ‰ƒCƒ“‚¸‚Â‰º‚©‚çÁ‚µ‚Ä‚¢‚­B
-; vsync‚P‰ñ•ª‚¸‚Â‘Ò‚Á‚ÄÁ‚µ‚Ä‚¢‚­B
-
 code segment
 	assume cs:code, ds:code
 	
